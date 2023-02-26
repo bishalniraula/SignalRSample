@@ -33,9 +33,9 @@ namespace SignalRSample.Hubs
             {
                 var UserConnections = HubConnections.Users[UserId];
                 UserConnections.Remove(Context.ConnectionId);
-                
+
                 HubConnections.Users.Remove(UserId);
-                if(UserConnections.Any())
+                if (UserConnections.Any())
                     HubConnections.Users.Add(UserId, UserConnections);
             }
 
@@ -61,15 +61,15 @@ namespace SignalRSample.Hubs
             var UserId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userName = _db.Users.FirstOrDefault(u => u.Id == UserId).UserName;
 
-            await Clients.All.SendAsync("ReceiveDeleteRoomMessage", deleted,selected, roomName,userName);
+            await Clients.All.SendAsync("ReceiveDeleteRoomMessage", deleted, selected, roomName, userName);
         }
 
-        public async Task SendPublicMessage(int roomId,string message, string roomName)
+        public async Task SendPublicMessage(int roomId, string message, string roomName)
         {
             var UserId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userName = _db.Users.FirstOrDefault(u => u.Id == UserId).UserName;
 
-            await Clients.All.SendAsync("ReceivePublicMessage", roomId, UserId,userName, message,roomName);
+            await Clients.All.SendAsync("ReceivePublicMessage", roomId, UserId, userName, message, roomName);
         }
 
         public async Task SendPrivateMessage(string receiverId, string message, string receiverName)
@@ -79,7 +79,7 @@ namespace SignalRSample.Hubs
 
             var users = new string[] { senderId, receiverId };
 
-            await Clients.Users(users).SendAsync("ReceivePrivateMessage", senderId, senderName, receiverId, message, Guid.NewGuid(),receiverName);
+            await Clients.Users(users).SendAsync("ReceivePrivateMessage", senderId, senderName, receiverId, message, Guid.NewGuid(), receiverName);
         }
 
         public async Task SendOpenPrivateChat(string receiverId)
@@ -111,5 +111,5 @@ namespace SignalRSample.Hubs
 
         //}
 
-    } 
+    }
 }
